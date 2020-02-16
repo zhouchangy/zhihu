@@ -1,14 +1,33 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+
+import index from '../views/index.vue'
+import Xiangqing from '../views/Xiangqing.vue'
+import My from '../views/My.vue'
+import comment from '../views/comment.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: Home
+    name: 'index',
+    component: index
+  },
+  {
+    path: '/My',
+    name: 'My',
+    component: My
+  },
+  {
+    path: '/Xiangqing',
+    name: 'Xiangqing',
+    component: Xiangqing
+  },
+  {
+    path: '/comment',
+    name: 'comment',
+    component: comment 
   },
   {
     path: '/about',
