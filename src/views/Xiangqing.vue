@@ -13,8 +13,8 @@
             <span>{{comments}}</span>
         </div>
         <div class="zan">
-            <img src="@/assets/img/zan.png" width="30rem" height="30rem" @click.once="goodSum">
-            <span>{{popularity}}</span>
+            <img src="@/assets/img/zan.png" width="30rem" height="30rem" @click="zan">
+            {{like_count}}
         </div>
         <div class="collect"><img :src=" imgsrc || require('@/assets/img/shouc.png')" width="30rem" height="30rem"></div>
         <div class="share"><img src="@/assets/img/zhuanf.png" width="30rem" height="30rem" @click="share"></div>
@@ -47,8 +47,14 @@ methods: {
         hreftwo() {
             this.$router.replace('/comment');
         },
-        goodSum(){
-            this.popularity++;
+        zan(){
+            if(this.flg){
+                this.like_count++;
+                this.flg=false;
+            }else{
+                this.like_count--;
+                this.flg=true;
+            }
         },
         goComments(){
             this.$router.push(`/comments?comments=${this.comments}&longComments=${this.long_comments}&shortComments=${this.short_comments}&id=${this.id}`)
@@ -80,6 +86,7 @@ data() {
     main:'',
     comments:'',
     popularity:'',
+    like_count:10,
     imgsrc:'',
     long_comments:'',
     short_comments:'',
