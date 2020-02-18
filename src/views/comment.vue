@@ -1,12 +1,12 @@
 <template>
 	<div id="commment">
 		<div class="back">
-			<img src="@/assets/img/back.png" @click="go" />
-			<h1>13条评论</h1>
+			<img src="@/assets/img/back.png" @click="go"  class="ba"/>
+			<h1>42条评论</h1>
 		</div>
         <!-- /back -->
 		<div class="long">
-			<h2>15条长评</h2>
+			<h2>10条长评</h2>
 			<div class="long_Words" v-for="long in long" :key="long.title">
 				<div class="left">
 					<img :src="long.avatar" />
@@ -24,7 +24,7 @@
 		</div>
         <!--/long-->
 		<div class="short">
-			<h2>14条短评</h2>
+			<h2>13条短评</h2>
 			<div class="short_com" v-for="short in short" :key="short.title">
 				<div class="short_Left">
 					<img :src="short.avatar" />
@@ -51,7 +51,7 @@
     border-bottom:0.1rem solid #F1F1F1;
     margin-top: 1rem
 }
-.back img{
+.back .ba{
     float:left;
     width:7%;
 }
@@ -73,7 +73,6 @@
  }
 .left{
     padding:0 0.5rem 0 0;
-    margin-bottom:5rem;
 }
 .left img{
     width:2.5rem;
@@ -140,12 +139,18 @@
         },
 		data(){
 			return{
-				long:[],
-				short:[]
+				long_comments:'',
+                short_comments:'',
+                comments:'',
+				long:'',
+				short:''
 			}
 		},
 		//接口
-		mounted:function(){
+		mounted(){
+			this.comments = this.$route.query.comments;
+            this.long_comments = this.$route.query.longComments;
+            this.short_comments = this.$route.query.shortComments;
 			this.axios.get("story/4232852/long-comments").then(res =>{
 			this.long=res.data.comments;	
 			});

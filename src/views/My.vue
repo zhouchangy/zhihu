@@ -34,7 +34,7 @@
 export default {
     methods: {
         My() {
-            this.$router.replace('/index');
+            this.$router.replace('/');
         }
     },
 }

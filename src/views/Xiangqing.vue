@@ -1,33 +1,38 @@
 <template>
 <div>
-    <div class="note" :style ="note">
-        <p class="font">小事 · 再也回不去的篮球场</p>
-        <p class="brow">Pixabay/CCO</p>
+    <div class="img">
+        <img :src="main.image" width="100%" height="380px"> 
+        <div class="title">{{main.title}}</div>
+        <div class="source">{{main.image_source}}</div>
     </div>
-    <div id="content">
-        <p class="other">那些学生时代喜欢一下课就打篮球的男生后来怎样了？</p>
-        <p><span>作者 / 像少年拉菲迟</span>   <a href="">进入「知乎」查看原文</a></p>
-        <p class="ton">你来到了大学，每天下午打篮球，夏天温度直逼 40 度的时候，你睡到下午 3 点，起床去食堂吃个饭，便走到了篮球场。</p>
-        <p class="ton">这么些年，磨烂了九双鞋，十双袜，手指被顶过不下百次，每次你都像科比那样揉一揉又站到了篮球场上，在心里对自己说到伤疤男人的勋章。</p>
-        <p class="ton">你不情愿的从一个竞技场来到了另一个地狱级竞技场，好不容易找到一份工作玩命的干，为的就是留在这个光鲜亮丽的城市，你也偶尔上班摸鱼，借着上厕所的工夫打开虎扑看一看篮球比分，此时厕所的另一个坑位发出了库里好球儿的声音，你好像又找到了新的队友。</p>
-        <p class="ton">时间来到了这该死的 2020，这一年真的挺操蛋的，你在 1 月 27 日早上得知科比去世的消息，这个名字太过熟悉了，以至于你不敢相信，呆呆的坐在那里，似水流年。</p>
-        <p class="ton bottom">安息吧，科比。</p>
-        <button type="info">进入「知乎」查看相关讨论</button>
-    </div>
-    <div id="footer">
-        <div><img src="@/assets/img/back.png" width="30rem" height="30rem" class="one" @click="hrefone"></div>
-        <div><img src="@/assets/img/msg.png" width="30rem" height="30rem" class="second" @click="hreftwo"></div>
-        <!-- <div><img src="@/assets/img/zan.png" width="30rem" height="30rem"></div> -->
-        <!--动态点赞开始-->
-        <div class="praise">
-            <span id="praise"><img src="@/assets/img/zan.png" id="praise-img" class="animation"></span>
-            <span id="praise-txt" class="">89</span>
-            <span id="add-num" style="display: inline;"><em class="add-animation">-1</em></span>
+    <div v-html="main.body" class="text"></div>
+    <div class="footer">
+        <div class="back"><img src="@/assets/img/back.png" width="30rem" height="30rem" @click="hrefone"></div>
+        <div class="msg">
+            <img src="@/assets/img/msg.png" width="30rem" height="30rem" @click="hreftwo">
+            <span>{{comments}}</span>
         </div>
-        <!--动态点赞结束-->
-        <div><img src="@/assets/img/shouc.png" width="33rem"></div>
-        <div @click="shareToRoom()"><img src="@/assets/img/zhuanf.png" width="30rem" height="30rem" class="last"></div>
+        <div class="zan">
+            <img src="@/assets/img/zan.png" width="30rem" height="30rem" @click.once="goodSum">
+            <span>{{popularity}}</span>
+        </div>
+        <div class="collect"><img :src=" imgsrc || require('@/assets/img/shouc.png')" width="30rem" height="30rem"></div>
+        <div class="share"><img src="@/assets/img/zhuanf.png" width="30rem" height="30rem" @click="share"></div>
     </div>
+    <!-- /footer -->
+    <div class="poper" >
+        <div :class="{poperBg:ifpoperCupHiden}" @click="shareClose"></div>
+        <div class="poperArea" :class="{poperCupHiden:ifpoperCupHiden}">
+            <div><img src="@/assets/img/weixin.png">微信好友</div>
+            <div><img src="@/assets/img/firend.png"> 朋友圈 </div>
+            <div><img src="@/assets/img/weibo.png">新浪微博</div>
+            <div><img src="@/assets/img/QQ.png">QQ</div>
+            <div> <img src="@/assets/img/copy.png">复制链接</div>
+            <div><img src="@/assets/img/liu.png"> 浏览器打开</div>
+            <div><img src="@/assets/img/more.png">更多</div>
+        </div>   
+    </div>
+    <!-- /poper -->
 </div>
 </template>
 
@@ -42,138 +47,172 @@ methods: {
         hreftwo() {
             this.$router.replace('/comment');
         },
-        shareToRoom() {
-        //自定义内容
-      const share = {
-        title: "东金秀财",
-        desc: "描述",
-        image_url: ["https://xxx.jpeg"],
-        share_url: "https://地址"
-      };
-      let image_urls = share.image_url.map(function(image) {
-        return encodeURIComponent(image);
-      });
-       //跳转地址
-      location.replace(
-        "https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=" +
-          encodeURIComponent(share.share_url) +
-          "&title=" +
-          share.title +
-          "&pics=" +
-          image_urls.join("|") +
-          "&summary=" +
-          share.desc
-      );
-    }
+        goodSum(){
+            this.popularity++;
+        },
+        goComments(){
+            this.$router.push(`/comments?comments=${this.comments}&longComments=${this.long_comments}&shortComments=${this.short_comments}&id=${this.id}`)
+        },
+        share(){
+            this.ifpoperCupHiden = true;
+        },
+        shareClose(){
+            this.ifpoperCupHiden = false;
+        }
     },
-mounted:function(){
-    $("#praise").click(function(){
-			var praise_img = $("#praise-img");
-			var text_box = $("#add-num");
-			var praise_txt = $("#praise-txt");
-			var num=parseInt(praise_txt.text());
-			if(praise_img.attr("src") == ("/img/erzan.png")){
-				$(this).html("<img src='/img/zan.png' id='praise-img' class='animation' />");
-				praise_txt.removeClass("hover");
-				$(".add-animation").removeClass("hover");
-				num -=1;
-				praise_txt.text(num)
-			}else{
-				$(this).html("<img src='/img/erzan.png' id='praise-img' class='animation' />");
-				praise_txt.addClass("hover");
-				$(".add-animation").addClass("hover");
-				num +=1;
-				praise_txt.text(num)
-			}
-		});
-},
+
+mounted(){
+        this.id = this.$route.params.id
+        this.axios.get(`news/3892357`).then(res => {
+            this.main = res.data
+        })
+         this.axios.get(`story-extra/${this.id}`).then(res => {
+            this.comments = res.data.comments;
+            this.popularity = res.data.popularity;
+            this.long_comments = res.data.long_comments;
+            this.short_comments = res.data.short_comments;
+        })
+    },
 
 data() {
-    return {};
     return {
-    note: {
-    backgroundImage: "url(" + require("@/assets/img/banner.jpg") + ")",
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "100%",
-    }
+    id:'',
+    main:'',
+    comments:'',
+    popularity:'',
+    imgsrc:'',
+    long_comments:'',
+    short_comments:'',
+    ifpoperCupHiden:false,
     }
   }
 }
 </script>
 
 <style>
-.note{
-    width:100%;
-    height:40vh;
+.main{
+    width: 96%;
+    box-sizing: border-box;
+    padding-left: 1.2rem;
+    margin-top: 1rem
 }
-.font{
-    color: #fff;
-    font-size: 1.8rem;
-    width: 85%;
-    padding-top: 15.5rem;
-    padding-left: 1.5rem
+.img{
+    position: relative;
 }
-.brow{
-    color: #ccc;
-    padding-left: 18rem;
-    padding-top: .5rem
+.question-title{
+     width: 90%;
+     padding-left: 1.3rem;
 }
-#content{
-    font-size: 1.1rem;
-    padding-top: 1rem;
+.answer{
     width: 90%;
-    margin: auto
+    padding-left: 1.3rem;
+    margin-top: 1rem
 }
-#content p span{
-    color: #666
+.answer p{
+    margin-top: .8rem;
+    font-size: 1.1rem
 }
-#content a{
-    padding-left: 1rem;
-    color: blue
+.img .title{
+    position: absolute;
+    left: 1rem;
+    bottom: 4rem;
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: bold;
 }
-#content .other{
-    font-size: 1.3rem;
-    padding-bottom: 1rem;
-    font-weight: 600
+.img .source{
+    position: absolute;
+    bottom: 1rem;
+    right:1rem;
+    color: #fff;
+    font-size: .8rem
 }
-#content .ton{
-    font-size: 1.2rem;
-    margin-top: 1rem;
-    line-height: 1.6rem
+.view-more a{
+    color: #fff
 }
-#content .bottom{
-    padding-bottom: 1rem
-}
-button{
+.view-more{
     margin-bottom: 4rem;
     background-color: #1D82FE;
     border: 0;
     outline: 0;
     height: 3rem;
     border-radius: 1.5rem;
-    color: #fff!important;
-    width: 23rem
-  
+    width: 23rem;
+    line-height: 3rem;
+    font-size: 1.2rem;
+    text-align: center;
+    margin-left: 1.3rem;
+    margin-top: 1rem
 }
-#footer{
+.text img{
+    width: 100%
+}
+.text .avatar{
+    width: 2.5rem
+}
+.footer{
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    background-color:rgb(248, 245, 245);
-    height: 2.8rem;
-    margin-top: 2rem;
     position: fixed;
     bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #eee;
+    padding: .5rem 0;
 }
-#footer .one{
-    padding-left: 1rem;
-    border-right:solid #666 .05rem;
-    padding-right: 1.2rem
+.footer div{
+    flex: 1;
+    display: flex;
+    justify-content: center
 }
-#footer .last{
-    padding-right: 1.5rem;
-
+.footer div.back{
+    border-right: .08rem solid #ccc;
 }
-
+.msg,.zan{
+    position: relative;
+}
+.msg span,.zan span{
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 1rem
+}
+.poperBg{
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color:rgba(0,0,0,0.6);
+    height: 100%;
+    width: 100%;
+    z-index: 1200;
+}
+.poperArea{
+    width: 100vw;
+    display: flex;
+    flex-wrap: wrap;
+    padding:2rem 1rem;
+    box-sizing: border-box;
+    background-color: #fff;
+    border-top-right-radius: 1.1rem;
+    border-top-left-radius: 1.1rem;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 1600;
+    transition: all 0.3s ease;
+    transform:translateY(100%) 
+}
+.poperArea div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 25%;
+    box-sizing: border-box;
+    margin-bottom: 1.2rem;
+}
+.poperCupHiden{
+    transform:translateY(0%) 
+}
+.back img{
+    width: 36%
+}
 </style>

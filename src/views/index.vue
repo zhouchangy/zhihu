@@ -2,14 +2,14 @@
     <div>
         <div id="header">
             <div class="left">
-                <p class="num">29</p>
-                <p class="one">一月</p>
+                <p class="num">{{day}}</p>
+                <p class="one">{{month}}月</p>
             </div>
             <div>
                 <img src="@/assets/img/shu.png" class="img">
             </div>
             <div class="center">
-                <span>早上好！</span>
+                <span>{{sayHello}}</span>
             </div>
             <div class="right" @click="To">
                 <img src="@/assets/img/header.png" width="46rem" height="46rem">
@@ -60,6 +60,9 @@ export default{
 
     data(){
         return {
+            day:'',
+            month:'',
+            sayHello:'',
             swiperList: [],
             conList: [],
             count: 0,
@@ -81,12 +84,62 @@ export default{
         }, 1000);
         }
     },
-    mounted:function(){
-        this.axios.get("news/latest").then(res => {
-            this.swiperList = res.data.top_stories;
-            this.conList = res.data.stories
-        })
-    }
+    mounted(){
+    var _this = this;
+    this.axios.get("news/latest").then(res => {
+      for (let i = 0; i < res.data.top_stories.length; i++) {
+        if (res.data.top_stories[i].image.indexOf("pic3") != -1) {
+          res.data.top_stories[i].image = res.data.top_stories[i].image.replace(
+            /pic3/,
+            "pic1"
+          );
+        }
+      }
+      for (let i = 0; i < res.data.stories.length; i++) {
+        if (res.data.stories[i].images[0].indexOf("pic3") != -1) {
+          res.data.stories[i].images[0] = res.data.stories[i].images[0].replace(
+            /pic3/,
+            "pic1"
+          );
+        }
+      }
+      this.swiperList = res.data.top_stories;
+      this.conList=res.data.stories;
+    });
+       this.day = getNowDate().getDate();
+       this.month = getNowDate().getMonth()+1;
+       let sayHello = getNowDate().getHours();
+       switch(sayHello){
+            case 0:;
+            case 1:;
+            case 2:;
+            case 3:;
+            case 4:;
+            case 5:;
+            case 6:;
+            case 7:;
+            case 8 : this.sayHello = '早上好' ; break;
+            case 9:;
+            case 10:;
+            case 11:;
+            case 12:;
+            case 13 : this.sayHello = '中午好' ; break;
+            case 14:;
+            case 15:;
+            case 16:;
+            case 17:;
+            case 18:;
+            case 19 : this.sayHello = '下午好' ; break;
+            case 20:;
+            case 21:;
+            case 22:;
+            case 23 : this.sayHao = '晚上好' ; break;
+       }
+    },
+    
+}
+var getNowDate = function(){
+    return new Date();
 }
 </script>
 
@@ -111,9 +164,11 @@ export default{
 .left .num{
     font-size: 1.8rem;
     height: 1.8rem;
+    padding-left: 1rem
 }
 .left .one{
-    padding-top: 1rem
+    padding-top: 1rem;
+    padding-left: 1.3rem
 }
 .center{
     padding-right: 7rem;
