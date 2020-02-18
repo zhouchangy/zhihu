@@ -16,7 +16,10 @@
             <img src="@/assets/img/zan.png" width="30rem" height="30rem" @click="zan">
             {{like_count}}
         </div>
-        <div class="collect"><img :src=" imgsrc || require('@/assets/img/shouc.png')" width="30rem" height="30rem"></div>
+        <div class="collect" @click="collect">
+            <img src="@/assets/img/shouc.png" width="30rem" height="30rem" v-show="downIcon">
+            <img src="@/assets/img/yisc.png" width="30rem" height="30rem" v-show="!downIcon">
+        </div>
         <div class="share"><img src="@/assets/img/zhuanf.png" width="30rem" height="30rem" @click="share"></div>
     </div>
     <!-- /footer -->
@@ -47,6 +50,7 @@ methods: {
         hreftwo() {
             this.$router.replace('/comment');
         },
+        //点赞
         zan(){
             if(this.flg){
                 this.like_count++;
@@ -55,6 +59,10 @@ methods: {
                 this.like_count--;
                 this.flg=true;
             }
+        },
+        //收藏
+        collect(){
+            this.downIcon=!this.downIcon
         },
         goComments(){
             this.$router.push(`/comments?comments=${this.comments}&longComments=${this.long_comments}&shortComments=${this.short_comments}&id=${this.id}`)
@@ -87,6 +95,7 @@ data() {
     comments:'',
     popularity:'',
     like_count:10,
+    downIcon:true,
     imgsrc:'',
     long_comments:'',
     short_comments:'',
